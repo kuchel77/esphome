@@ -36,7 +36,7 @@ climate::ClimateTraits Mitsubishi112Climate::traits() {
   traits.set_supports_away(false);
   traits.set_visual_min_temperature(MITSUBISHI112_TEMP_MIN);
   traits.set_visual_max_temperature(MITSUBISHI112_TEMP_MAX);
-  traits.set_visual_temperature_step(1f);
+  traits.set_visual_temperature_step(1);
   return traits;
 }
 
@@ -113,8 +113,9 @@ void Mitsubishi112Climate::transmit_state_() {
   // Make sure we have desired temp in the correct range.
   float safecelsius = std::max(this->target_temperature, MITSUBISHI112_TEMP_MIN);
   safecelsius = std::min(safecelsius, MITSUBISHI112_TEMP_MAX);
+  int desiredtemp = safecelsius;
   remote_state[7] &= 0xF0;                    // Clear temp bits.
-  remote_state[7] |= ((uint8_t) MITSUBISHI112_TEMP_MAX - safecelcius);
+  remote_state[7] |= ((uint8_t) MITSUBISHI112_TEMP_MAX - desiredtemp);
 
   // Calculate & set the checksum for the current internal state of the remote.
   // Stored the checksum value in the last byte.

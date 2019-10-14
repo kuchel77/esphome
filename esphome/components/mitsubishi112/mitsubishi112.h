@@ -18,7 +18,7 @@ class Mitsubishi112Climate : public climate::Climate, public Component {
   }
   void set_supports_cool(bool supports_cool) { this->supports_cool_ = supports_cool; }
   void set_supports_heat(bool supports_heat) { this->supports_heat_ = supports_heat; }
-  void set_supports_auto(bool supports_auto) { this->supports_auto_ = supports_heat; }
+  void set_supports_auto(bool supports_auto) { this->supports_auto_ = supports_auto; }
   void set_sensor(sensor::Sensor *sensor) { this->sensor_ = sensor; }
 
  protected:
