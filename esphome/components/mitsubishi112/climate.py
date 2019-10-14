@@ -6,7 +6,8 @@ from esphome.const import CONF_ID, CONF_SENSOR
 AUTO_LOAD = ['sensor']
 
 mitsubishi112_ns = cg.esphome_ns.namespace('mitsubishi112')
-Mitsubishi112Climate = mitsubishi112_ns.class_('Mitsubishi112Climate', climate.Climate, cg.Component)
+Mitsubishi112Climate = mitsubishi112_ns.class_('Mitsubishi112Climate',
+                                               climate.Climate, cg.Component)
 
 CONF_TRANSMITTER_ID = 'transmitter_id'
 CONF_SUPPORTS_HEAT = 'supports_heat'
