@@ -12,20 +12,18 @@ const uint16_t MITSUBISHI112_BITS = MITSUBISHI112_STATE_LENGTH * 8;
 const uint8_t MITSUBISHI112_HEAT = 1;
 const uint8_t MITSUBISHI112_DRY = 2;
 const uint8_t MITSUBISHI112_COOL = 3;
-const uint8_t MITSUBISHI112_FAN = 7;
-const uint8_t MITSUBISHI112_AUTO = 8;
+const uint8_t MITSUBISHI112_AUTO = 7;
 
 const uint8_t MITSUBISHI112_POWER_MASK = 0x04;
 
-const uint8_t MITSUBISHI112_HALF_DEGREE = 0b00100000;
 const float MITSUBISHI112_TEMP_MAX = 31.0;
 const float MITSUBISHI112_TEMP_MIN = 16.0;
 
-const uint16_t MITSUBISHI112_HEADER_MARK = 3000;
-const uint16_t MITSUBISHI112_HEADER_SPACE = 1650;
-const uint16_t MITSUBISHI112_BIT_MARK = 500;
-const uint16_t MITSUBISHI112_ONE_SPACE = 1050;
-const uint16_t MITSUBISHI112_ZERO_SPACE = 325;
+const uint16_t MITSUBISHI112_HEADER_MARK = 3450;
+const uint16_t MITSUBISHI112_HEADER_SPACE = 1696;
+const uint16_t MITSUBISHI112_BIT_MARK = 450;
+const uint16_t MITSUBISHI112_ONE_SPACE = 1250;
+const uint16_t MITSUBISHI112_ZERO_SPACE = 385;
 const uint32_t MITSUBISHI112_GAP = MITSUBISHI112_HEADER_SPACE;
 
 climate::ClimateTraits Mitsubishi112Climate::traits() {
@@ -38,7 +36,7 @@ climate::ClimateTraits Mitsubishi112Climate::traits() {
   traits.set_supports_away(false);
   traits.set_visual_min_temperature(MITSUBISHI112_TEMP_MIN);
   traits.set_visual_max_temperature(MITSUBISHI112_TEMP_MAX);
-  traits.set_visual_temperature_step(.5f);
+  traits.set_visual_temperature_step(1f);
   return traits;
 }
 
@@ -81,10 +79,15 @@ void Mitsubishi112Climate::transmit_state_() {
   remote_state[1] = 0xCB;
   remote_state[2] = 0x26;
   remote_state[3] = 0x01;
+  remote_state[4] = 0x00;
   remote_state[5] = 0x24;
   remote_state[6] = 0x03;
-  remote_state[7] = 0x07;
-  remote_state[8] = 0x40;
+  remote_state[7] = 0x0B;
+  remote_state[8] = 0x10;
+  remote_state[9] = 0x00;
+  remote_state[10] = 0x00;
+  remote_state[11] = 0x00;
+  remote_state[12] = 0x30;
 
   // Set mode
   switch (this->mode) {
@@ -110,14 +113,8 @@ void Mitsubishi112Climate::transmit_state_() {
   // Make sure we have desired temp in the correct range.
   float safecelsius = std::max(this->target_temperature, MITSUBISHI112_TEMP_MIN);
   safecelsius = std::min(safecelsius, MITSUBISHI112_TEMP_MAX);
-  // Convert to integer nr. of half degrees.
-  auto half_degrees = static_cast<uint8_t>(safecelsius * 2);
-  if (half_degrees & 1)                      // Do we have a half degree celsius?
-    remote_state[12] |= MITSUBISHI112_HALF_DEGREE;  // Add 0.5 degrees
-  else
-    remote_state[12] &= ~MITSUBISHI112_HALF_DEGREE;  // Clear the half degree.
   remote_state[7] &= 0xF0;                    // Clear temp bits.
-  remote_state[7] |= ((uint8_t) MITSUBISHI112_TEMP_MAX - half_degrees / 2);
+  remote_state[7] |= ((uint8_t) MITSUBISHI112_TEMP_MAX - safecelcius);
 
   // Calculate & set the checksum for the current internal state of the remote.
   // Stored the checksum value in the last byte.
