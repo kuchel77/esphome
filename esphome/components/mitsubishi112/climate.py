@@ -12,12 +12,14 @@ Mitsubishi112Climate = mitsubishi112_ns.class_('Mitsubishi112Climate',
 CONF_TRANSMITTER_ID = 'transmitter_id'
 CONF_SUPPORTS_HEAT = 'supports_heat'
 CONF_SUPPORTS_COOL = 'supports_cool'
+CONF_SUPPORTS_AUTO = 'supports_auto'
 
 CONFIG_SCHEMA = cv.All(climate.CLIMATE_SCHEMA.extend({
     cv.GenerateID(): cv.declare_id(Mitsubishi112Climate),
     cv.GenerateID(CONF_TRANSMITTER_ID): cv.use_id(remote_transmitter.RemoteTransmitterComponent),
     cv.Optional(CONF_SUPPORTS_COOL, default=True): cv.boolean,
     cv.Optional(CONF_SUPPORTS_HEAT, default=True): cv.boolean,
+    cv.Optional(CONF_SUPPORTS_AUTO, default=True): cv.boolean,
     cv.Optional(CONF_SENSOR): cv.use_id(sensor.Sensor),
 }).extend(cv.COMPONENT_SCHEMA))
 
@@ -29,6 +31,7 @@ def to_code(config):
 
     cg.add(var.set_supports_cool(config[CONF_SUPPORTS_COOL]))
     cg.add(var.set_supports_heat(config[CONF_SUPPORTS_HEAT]))
+    cg.add(var.set_supports_heat(config[CONF_SUPPORTS_AUTO]))
     if CONF_SENSOR in config:
         sens = yield cg.get_variable(config[CONF_SENSOR])
         cg.add(var.set_sensor(sens))
