@@ -122,7 +122,7 @@ void Mitsubishi112Climate::transmit_state_() {
   for (uint8_t checksum_byte = 0; checksum_byte < MITSUBISHI112_STATE_LENGTH - 1; checksum_byte++)
     remote_state[MITSUBISHI112_STATE_LENGTH - 1] += remote_state[checksum_byte];
 
-  ESP_LOGV(TAG, "Sending Mitsubishi code: %02x", remote_state[7]);
+  ESP_LOGV(TAG, "Sending Mitsubishi code: %02x", remote_state[8]);
 
   auto transmit = this->transmitter_->transmit();
   auto data = transmit.get_data();
