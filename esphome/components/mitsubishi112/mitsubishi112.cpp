@@ -59,6 +59,7 @@ void Mitsubishi112Climate::setup() {
     this->mode = climate::CLIMATE_MODE_OFF;
     this->target_temperature = 24;
   }
+    ESP_LOGV(TAG, "Sending Mitsubishi code: %02x", remote_state[8]);
 }
 
 void Mitsubishi112Climate::control(const climate::ClimateCall &call) {
