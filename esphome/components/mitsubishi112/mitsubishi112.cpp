@@ -63,11 +63,12 @@ void Mitsubishi112Climate::setup() {
 }
 
 void Mitsubishi112Climate::control(const climate::ClimateCall &call) {
+    ESP_LOGV(TAG, "Sending Mitsubishi code: %02x", remote_state[8]);
   if (call.get_mode().has_value())
     this->mode = *call.get_mode();
   if (call.get_target_temperature().has_value())
     this->target_temperature = *call.get_target_temperature();
-
+  ESP_LOGV(TAG, "Sending Mitsubishi code: %02x", remote_state[8]);
   this->transmit_state_();
   this->publish_state();
 }
