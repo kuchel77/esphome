@@ -59,22 +59,22 @@ void Mitsubishi112Climate::setup() {
     this->mode = climate::CLIMATE_MODE_OFF;
     this->target_temperature = 24;
   }
-    ESP_LOGD(TAG, "Sending Mitsubishi code: %02x", remote_state[8]);
+    ESP_LOGD(TAG, "Sending Mitsubishi code: %02x");
 }
 
 void Mitsubishi112Climate::control(const climate::ClimateCall &call) {
-    ESP_LOGD(TAG, "Sending Mitsubishi code: %02x", remote_state[8]);
+    ESP_LOGD(TAG, "Sending Mitsubishi code: %02x");
   if (call.get_mode().has_value())
     this->mode = *call.get_mode();
   if (call.get_target_temperature().has_value())
     this->target_temperature = *call.get_target_temperature();
-  ESP_LOGD(TAG, "Sending Mitsubishi code: %02x", remote_state[8]);
+  ESP_LOGD(TAG, "Sending Mitsubishi code: %02x");
   this->transmit_state_();
   this->publish_state();
 }
 
 void Mitsubishi112Climate::transmit_state_() {
-    ESP_LOGD(TAG, "Sending Mitsubishi code: %02x", remote_state[8]);
+    ESP_LOGD(TAG, "Sending Mitsubishi code: %02x");
   uint8_t remote_state[MITSUBISHI112_STATE_LENGTH] = {0};
 
   // A known good state. (On, Cool, 24C)
@@ -126,7 +126,7 @@ void Mitsubishi112Climate::transmit_state_() {
     remote_state[MITSUBISHI112_STATE_LENGTH - 1] += remote_state[checksum_byte];
 
 
-  ESP_LOGD(TAG, "Sending Mitsubishi code: %02x", remote_state[8]);
+  ESP_LOGD(TAG, "Sending Mitsubishi code: %02x");
 
   auto transmit = this->transmitter_->transmit();
   auto data = transmit.get_data();
