@@ -72,6 +72,7 @@ void Mitsubishi112Climate::control(const climate::ClimateCall &call) {
 }
 
 void Mitsubishi112Climate::transmit_state_() {
+    ESP_LOGV(TAG, "Sending Mitsubishi code: %02x", remote_state[8]);
   uint8_t remote_state[MITSUBISHI112_STATE_LENGTH] = {0};
 
   // A known good state. (On, Cool, 24C)
@@ -121,6 +122,7 @@ void Mitsubishi112Climate::transmit_state_() {
   // Stored the checksum value in the last byte.
   for (uint8_t checksum_byte = 0; checksum_byte < MITSUBISHI112_STATE_LENGTH - 1; checksum_byte++)
     remote_state[MITSUBISHI112_STATE_LENGTH - 1] += remote_state[checksum_byte];
+
 
   ESP_LOGV(TAG, "Sending Mitsubishi code: %02x", remote_state[8]);
 
