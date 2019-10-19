@@ -6,7 +6,7 @@ namespace remote_base {
 
 static const char *TAG = "remote.rc_switch";
 
-RCSwitchBase rc_switch_protocols[8] = {RCSwitchBase(0, 0, 0, 0, 0, 0, false),
+RCSwitchBase rc_switch_protocols[9] = {RCSwitchBase(0, 0, 0, 0, 0, 0, false),
                                        RCSwitchBase(350, 10850, 350, 1050, 1050, 350, false),
                                        RCSwitchBase(650, 6500, 650, 1300, 1300, 650, false),
                                        RCSwitchBase(3000, 7100, 400, 1100, 900, 600, false),
